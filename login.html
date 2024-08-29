@@ -13,7 +13,7 @@
     <div class="notification" id="notification">Yanlış Şifre!</div>
 
     <div class="box">
-        <div class="container">
+        <div class="container" id="loginForm">
             <div class="top-header">
                 <span>Have an account?</span>
                 <header>Login</header>
@@ -40,17 +40,83 @@
                     <label><a href="#">Forgot password?</a></label>
                 </div>
             </div>
+
+            <!-- Register Butonu -->
+            <div class="register">
+                <span>Don't have an account?</span>
+                <button onclick="showRegister()">Register</button>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="container" id="registerForm" style="display: none;">
+            <div class="top-header">
+                <span>Register an account</span>
+                <header>Register</header>
+            </div>
+
+            <div class="input-field">
+                <input type="text" class="input" id="registerUsername" placeholder="Username" required>
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-field">
+                <input type="password" class="input" id="registerPassword" placeholder="Password" required>
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-field">
+                <input type="submit" class="submit" value="Register" onclick="registerUser()">
+            </div>
+
+            <div class="bottom">
+                <div class="left">
+                    <label>Already have an account?</label>
+                </div>
+                <div class="right">
+                    <button onclick="showLogin()">Login</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
+        // Login Form Göster
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // Register Form Göster
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        // Register Kullanıcı
+        function registerUser() {
+            var registerUsername = document.getElementById('registerUsername').value;
+            var registerPassword = document.getElementById('registerPassword').value;
+
+            if (registerUsername && registerPassword) {
+                // Kullanıcıyı LocalStorage'a kaydet
+                localStorage.setItem(registerUsername, registerPassword);
+                alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+                showLogin();
+            } else {
+                alert("Lütfen tüm alanları doldurun.");
+            }
+        }
+
+        // Giriş Yap
         function validateLogin() {
             var username = document.getElementById('username').value;
             var password = document.getElementById('password').value;
             var notification = document.getElementById('notification');
 
-            if (username === 'cubuk' && password === 'baba') {
+            // Kullanıcı bilgilerini LocalStorage'dan kontrol et
+            var storedPassword = localStorage.getItem(username);
+
+            if (storedPassword && storedPassword === password) {
                 // Doğru şifre: Yeşil renkte ve aşağıdan gelsin
                 notification.innerText = 'Başarıyla giriş yaptınız!';
                 notification.style.backgroundColor = 'green';
